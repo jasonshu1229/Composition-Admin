@@ -7,11 +7,13 @@
 		"build": "vue-cli-service build",
 		"lint": "vue-cli-service lint",
 		"prettier": "prettier --write .",
-		"prepare": "husky install"
+		"prepare": "husky install",
+		"commit": "cz"
 	},
 	"dependencies": {
 		"core-js": "^3.8.3",
-		"vue": "^3.2.13"
+		"vue": "^3.2.13",
+		"vue-router": "^4.0.13"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^17.0.3",
@@ -39,5 +41,6 @@
 		"commitizen": {
 			"path": "./node_modules/cz-conventional-changelog"
 		}
-	}
+	},
+	"rules": {"vue/multi-word-component-names": "off"}
 }
