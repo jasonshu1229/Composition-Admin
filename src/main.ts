@@ -1,11 +1,29 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 
+import shRequest from './service';
+
+// 全局引入 1)
+// import ElementPlus from 'element-plus';
+// import 'element-plus/dist/index.css';
+
 import router from './router';
-import store from './store';
+import store from './store/index';
 
-const app = createApp(App);
+// const app = createApp(App);
 
-app.use(router);
-app.use(store);
-app.mount('#app');
+// app.use(router);
+// app.use(store);
+// 全局注册 2)
+// app.use(ElementPlus);
+// app.mount('#app');
+
+createApp(App).use(router).use(store).mount('#app');
+
+console.log(process.env.VUE_APP_BASE_URL);
+console.log(process.env.VUE_APP_BASE_NAME);
+
+shRequest.request({
+	url: '/home/multidata',
+	method: 'GET'
+});
