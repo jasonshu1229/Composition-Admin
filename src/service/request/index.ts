@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AxiosInstance, AxiosRequestConfig } from 'axios';
+import type { AxiosInstance } from 'axios';
 import type { SHRequestInterceptors, SHRequestConfig } from './type';
 
 // axios的二次封装
@@ -48,8 +48,17 @@ class SHRequest {
 		);
 	}
 
-	request(config: AxiosRequestConfig): void {
+	request(config: SHRequestConfig): void {
+		// 为每个请求配置 请求拦截器
+		if (config.interceptors?.requestInterceptor) {
+			config = config.interceptors?.requestInterceptor(config);
+		}
+
 		this.instance.request(config).then((res) => {
+			// 为每个请求配置 响应拦截器
+			if (config.interceptors?.responseInterceptor) {
+				res = config.interceptors.responseInterceptor(res);
+			}
 			console.log(res);
 		});
 	}
