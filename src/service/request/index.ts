@@ -24,11 +24,33 @@ class SHRequest {
 			this.interceptors?.responseInterceptor,
 			this.interceptors?.responseInterceptorCatch
 		);
+
+		// 给所有的实例添加都有的拦截器
+		this.instance.interceptors.request.use(
+			(config) => {
+				console.log('所有的实例都有的拦截器：请求成功拦截');
+				return config;
+			},
+			(err) => {
+				console.log('所有的实例都有的拦截器：请求失败拦截');
+				return err;
+			}
+		);
+		this.instance.interceptors.response.use(
+			(config) => {
+				console.log('所有的实例都有的拦截器：响应成功拦截');
+				return config;
+			},
+			(err) => {
+				console.log('所有的实例都有的拦截器：响应失败拦截');
+				return err;
+			}
+		);
 	}
 
 	request(config: AxiosRequestConfig): void {
 		this.instance.request(config).then((res) => {
-			console.log(res.data);
+			console.log(res);
 		});
 	}
 }
