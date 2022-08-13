@@ -8,6 +8,11 @@ const shRequest = new SHRequest({
 	// 每个实例都可以有自己的拦截器
 	interceptors: {
 		requestInterceptor: (config) => {
+			// 携带 token 的拦截
+			// const token = 'token';
+			// if (token) {
+			// 	config.headers.Authorization = `Bearer ${token}`;
+			// }
 			console.log('请求成功的拦截');
 			return config;
 		},
