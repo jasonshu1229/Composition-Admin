@@ -11,4 +11,5 @@ export interface SHRequestInterceptors {
 // 对原来的AxiosRequestConfig进行扩展
 export interface SHRequestConfig extends AxiosRequestConfig {
 	interceptors?: SHRequestInterceptors;
+	showLoading?: boolean;
 }

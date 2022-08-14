@@ -15,19 +15,10 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-
+<script lang="ts" setup>
 // import { ElButton } from 'element-plus';
 // 单个组件引入样式，较为麻烦
 // import 'element-plus/lib/components/button/style/css';
-
-export default defineComponent({
-	name: 'App'
-	// components: {
-	// 	ElButton
-	// }
-});
 </script>
 
 <style lang="less">
