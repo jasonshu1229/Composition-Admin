@@ -83,33 +83,55 @@ class SHRequest {
 		);
 	}
 
-	request(config: SHRequestConfig): void {
-		// 为每个请求配置 请求拦截器
-		if (config.interceptors?.requestInterceptor) {
-			config = config.interceptors?.requestInterceptor(config);
-		}
+	request<T>(config: SHRequestConfig<T>): Promise<T> {
+		return new Promise((resolve, reject) => {
+			// 1. 为每个请求配置 请求拦截器
+			if (config.interceptors?.requestInterceptor) {
+				config = config.interceptors?.requestInterceptor(config);
+			}
 
-		// 让实例中传进来的showLoading生效
-		if (config.showLoading === false) {
-			this.showLoading = config.showLoading;
-		}
+			// 2. 判断是否让实例中传进来的showLoading生效
+			if (config.showLoading === false) {
+				this.showLoading = config.showLoading;
+			}
 
-		this.instance
-			.request(config)
-			.then((res) => {
-				// 为每个请求配置 响应拦截器
-				if (config.interceptors?.responseInterceptor) {
-					res = config.interceptors.responseInterceptor(res);
-				}
-				console.log(res);
+			this.instance
+				.request<any, T>(config)
+				.then((res) => {
+					// 1. 对每个请求数据的处理
+					// 为每个请求配置 响应拦截器
+					if (config.interceptors?.responseInterceptor) {
+						res = config.interceptors.responseInterceptor(res);
+					}
+					// 2. 将showLoading设置为初始值true，这样不会影响下一个请求
+					this.showLoading = DEFAULT_LOADING;
 
-				// 将showLoading设置为初始值true，这样不会影响下一个请求
-				this.showLoading = DEFAULT_LOADING;
-			})
-			.catch((err) => {
-				this.showLoading = DEFAULT_LOADING;
-				return err;
-			});
+					// 3. 将结果resolve
+					resolve(res);
+				})
+				.catch((err) => {
+					// 将showLoading设置为初始值true，这样不会影响下一个请求
+					this.showLoading = DEFAULT_LOADING;
+					reject(err);
+					return err;
+				});
+		});
+	}
+
+	get<T>(config: SHRequestConfig<T>): Promise<T> {
+		return this.request<T>({ ...config, method: 'GET' });
+	}
+
+	post<T>(config: SHRequestConfig<T>): Promise<T> {
+		return this.request<T>({ ...config, method: 'POST' });
+	}
+
+	delete<T>(config: SHRequestConfig<T>): Promise<T> {
+		return this.request<T>({ ...config, method: 'DELETE' });
+	}
+
+	patch<T>(config: SHRequestConfig<T>): Promise<T> {
+		return this.request<T>({ ...config, method: 'PATCH' });
 	}
 }
 

@@ -38,8 +38,19 @@ console.log(process.env.VUE_APP_BASE_NAME);
 // 	}
 // });
 
-shRequest.request({
-	url: '/home/multidata',
-	method: 'GET'
-	// showLoading: true
-});
+interface DataType {
+	data: any;
+	returnCode: string;
+	success: boolean;
+}
+
+shRequest
+	.get<DataType>({
+		url: '/home/multidata',
+		showLoading: false
+	})
+	.then((res) => {
+		console.log(res.data);
+		console.log(res.returnCode);
+		console.log(res.success);
+	});
