@@ -1,5 +1,8 @@
 import { createApp } from 'vue';
 import App from './App.vue';
+import 'normalize.css';
+import './assets/css/index.less';
+import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 
 import shRequest from './service';
 
@@ -10,18 +13,23 @@ import shRequest from './service';
 import router from './router';
 import store from './store/index';
 
-// const app = createApp(App);
+const app = createApp(App);
 
 // app.use(router);
 // app.use(store);
 // 全局注册 2)
 // app.use(ElementPlus);
+
 // app.mount('#app');
 
-createApp(App).use(router).use(store).mount('#app');
+app.use(router).use(store).mount('#app');
 
-console.log(process.env.VUE_APP_BASE_URL);
-console.log(process.env.VUE_APP_BASE_NAME);
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+	app.component(key, component);
+}
+
+// console.log(process.env.VUE_APP_BASE_URL);
+// console.log(process.env.VUE_APP_BASE_NAME);
 
 // shRequest.request({
 // 	url: '/home/multidata',
