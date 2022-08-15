@@ -38,7 +38,7 @@ class SHRequest {
 		// 2. 给所有的实例添加都有的拦截器
 		this.instance.interceptors.request.use(
 			(config) => {
-				console.log('所有的实例都有的拦截器：请求成功拦截');
+				// console.log('所有的实例都有的拦截器：请求成功拦截');
 
 				if (this.showLoading) {
 					this.loading = ElLoading.service({
@@ -52,13 +52,13 @@ class SHRequest {
 				return config;
 			},
 			(err) => {
-				console.log('所有的实例都有的拦截器：请求失败拦截');
+				// console.log('所有的实例都有的拦截器：请求失败拦截');
 				return err;
 			}
 		);
 		this.instance.interceptors.response.use(
 			(res) => {
-				console.log('所有的实例都有的拦截器：响应成功拦截');
+				// console.log('所有的实例都有的拦截器：响应成功拦截');
 
 				// 将loading移出
 				setTimeout(() => {
@@ -73,7 +73,7 @@ class SHRequest {
 				}
 			},
 			(err) => {
-				console.log('所有的实例都有的拦截器：响应失败拦截');
+				// console.log('所有的实例都有的拦截器：响应失败拦截');
 				// 根据不同的 HttpErrorCode 显示不同的错误信息
 				if (err.response.status === 404) {
 					console.log('404的错误~！');

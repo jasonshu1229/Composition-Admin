@@ -58,7 +58,7 @@ shRequest
 		showLoading: false
 	})
 	.then((res) => {
-		console.log(res.data);
-		console.log(res.returnCode);
-		console.log(res.success);
+		// console.log(res.data);
+		// console.log(res.returnCode);
+		// console.log(res.success);
 	});
