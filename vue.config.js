@@ -8,8 +8,19 @@ module.exports = defineConfig({
 	// 配置方式一： LCI提供的属性
 	outputDir: './build',
 	// build打包的时候可用，部署到服务器的时候不要使用！
-	publicPath: './',
+	// publicPath: './',
 	// 配置方式二： 和webpack属性完全一致，最后会进行合并
+	devServer: {
+		proxy: {
+			'^/api': {
+				target: 'http://152.136.185.210:5000',
+				pathRewrite: {
+					'^/api': ''
+				},
+				changeOrigin: true
+			}
+		}
+	},
 	configureWebpack: {
 		resolve: {
 			alias: {
