@@ -4,7 +4,7 @@ import 'normalize.css';
 import './assets/css/index.less';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 
-import shRequest from './service';
+// import shRequest from './service';
 
 // 全局引入 1)
 // import ElementPlus from 'element-plus';
