@@ -28,8 +28,8 @@
 		</div>
 
 		<el-button type="primary" class="login-btn" @click="handleLoginClick">
-			立即登录</el-button
-		>
+			立即登录
+		</el-button>
 	</div>
 </template>
 
@@ -54,7 +54,7 @@ export default defineComponent({
 
 		const handleLoginClick = () => {
 			console.log('立即登录');
-			accountRef.value?.loginAction();
+			accountRef.value?.loginAction(isKeepPassword.value);
 		};
 
 		return {
@@ -75,9 +75,11 @@ export default defineComponent({
 	font-size: 32px;
 	font-weight: 600;
 }
+
 .demo-tabs .custom-tabs-label .el-icon {
 	vertical-align: middle;
 }
+
 .demo-tabs .custom-tabs-label span {
 	vertical-align: middle;
 	margin-left: 4px;
@@ -98,6 +100,7 @@ export default defineComponent({
 		.el-link {
 			margin-right: 8px;
 		}
+
 		.el-link .el-icon--right.el-icon {
 			vertical-align: text-bottom;
 		}
