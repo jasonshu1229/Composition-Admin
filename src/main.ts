@@ -28,9 +28,6 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 	app.component(key, component);
 }
 
-// console.log(process.env.VUE_APP_BASE_URL);
-// console.log(process.env.VUE_APP_BASE_NAME);
-
 // shRequest.request({
 // 	url: '/home/multidata',
 // 	method: 'GET',
@@ -46,19 +43,19 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 // 	}
 // });
 
-interface DataType {
-	data: any;
-	returnCode: string;
-	success: boolean;
-}
+// interface DataType {
+// 	data: any;
+// 	returnCode: string;
+// 	success: boolean;
+// }
 
-shRequest
-	.get<DataType>({
-		url: '/home/multidata',
-		showLoading: false
-	})
-	.then((res) => {
-		// console.log(res.data);
-		// console.log(res.returnCode);
-		// console.log(res.success);
-	});
+// shRequest
+// 	.get<DataType>({
+// 		url: '/home/multidata',
+// 		showLoading: false
+// 	})
+// 	.then((res) => {
+// 		console.log(res.data);
+// 		console.log(res.returnCode);
+// 		console.log(res.success);
+// 	});

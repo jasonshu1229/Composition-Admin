@@ -13,6 +13,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue';
+import { useStore } from 'vuex';
 import { rules } from '@/views/login/config/account-config';
 import { ElForm } from 'element-plus';
 import localCache from '@/utils/cache';
@@ -20,6 +21,8 @@ import localCache from '@/utils/cache';
 export default defineComponent({
 	name: 'login-account',
 	setup() {
+		const store = useStore();
+
 		const account = reactive({
 			name: localCache.getCache('name') ?? '',
 			password: localCache.getCache('password') ?? ''
@@ -30,11 +33,19 @@ export default defineComponent({
 		const loginAction = (isKeepPassword: boolean) => {
 			formRef.value?.validate((valid) => {
 				if (valid) {
+					// 1. 判断是否需要记住密码
 					if (isKeepPassword) {
 						localCache.setCache('name', account.name);
 						localCache.setCache('password', account.password);
+					} else {
+						localCache.deleteCache('name');
+						localCache.deleteCache('password');
 					}
 				}
+
+				// 2. 开始进行登录验证
+				// account 默认是一个响应式对象
+				store.dispatch('login/accountLoginAction', { ...account });
 			});
 		};
 
