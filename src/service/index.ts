@@ -1,6 +1,7 @@
 // service统一出口
 import SHRequest from '@/service/request';
 import { BASE_URL, TIME_OUT } from './request/config';
+import localCache from '@/utils/cache';
 
 const shRequest = new SHRequest({
 	baseURL: BASE_URL,
@@ -9,10 +10,14 @@ const shRequest = new SHRequest({
 	interceptors: {
 		requestInterceptor: (config) => {
 			// 携带 token 的拦截
-			// const token = 'token';
+			const token = localCache.getCache('token');
 			// if (token) {
 			// 	config.headers.Authorization = `Bearer ${token}`;
 			// }
+			config.headers = {
+				Authorization: `Bearer ${token}`
+			};
+
 			return config;
 		},
 		requestInterceptorCatch: (err) => {

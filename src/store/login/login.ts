@@ -1,35 +1,65 @@
 import { Module } from 'vuex';
 
-import { accountLoginRequest } from '@/service/login/login';
+import {
+	accountLoginRequest,
+	requestUserInfoById,
+	requestUserMenusByRoleId
+} from '@/service/login/login';
+import router from '@/router';
 
 import { IAccount } from '@/service/login/type';
 import { ILoginState } from './types';
 import { IRootState } from '../types';
+
+import localCache from '@/utils/cache';
 
 const loginModule: Module<ILoginState, IRootState> = {
 	namespaced: true,
 	state() {
 		return {
 			token: '',
-			userInfo: {}
+			userInfo: {},
+			userMenus: []
 		};
 	},
 	getters: {},
 	mutations: {
 		changeToken(state, token: string) {
 			state.token = token;
+		},
+		changeUserInfo(state, userInfo: any) {
+			state.userInfo = userInfo;
+		},
+		changeUserMenus(state, userMenus: any) {
+			state.userMenus = userMenus;
 		}
 	},
 	actions: {
 		async accountLoginAction({ commit }, payload: IAccount) {
-			// 实现真正的登录逻辑
+			// 1. 实现登录逻辑
 			const loginResult = await accountLoginRequest(payload);
-			const { token } = loginResult.data;
+			const { id, token } = loginResult.data;
 			commit('changeToken', token);
-		},
-		phoneLoginAction({ commit }, payload: any) {
-			console.log('执行phoneLoginAction', payload);
+			localCache.setCache('token', token);
+
+			// 2. 请求用户信息
+			const userInfoResult = await requestUserInfoById(id);
+			const userInfo = userInfoResult.data;
+			commit('changeUserInfo', userInfo);
+			localCache.setCache('token', token);
+
+			// 3. 请求角色菜单
+			const userMenusResult = await requestUserMenusByRoleId(id);
+			const userMenus = userMenusResult.data;
+			commit('changeUserMenus', userMenus);
+			localCache.setCache('token', token);
+
+			// 4. 跳到首页
+			await router.push('/main');
 		}
+		// phoneLoginAction({ commit }, payload: any) {
+		// 	console.log('执行phoneLoginAction', payload);
+		// }
 	}
 };
 
