@@ -46,13 +46,13 @@ const loginModule: Module<ILoginState, IRootState> = {
 			const userInfoResult = await requestUserInfoById(id);
 			const userInfo = userInfoResult.data;
 			commit('changeUserInfo', userInfo);
-			localCache.setCache('token', token);
+			localCache.setCache('userInfo', userInfo);
 
 			// 3. 请求角色菜单
 			const userMenusResult = await requestUserMenusByRoleId(id);
 			const userMenus = userMenusResult.data;
 			commit('changeUserMenus', userMenus);
-			localCache.setCache('token', token);
+			localCache.setCache('userMenus', userMenus);
 
 			// 4. 跳到首页
 			await router.push('/main');
