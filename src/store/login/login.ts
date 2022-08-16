@@ -56,10 +56,21 @@ const loginModule: Module<ILoginState, IRootState> = {
 
 			// 4. 跳到首页
 			await router.push('/main');
+		},
+		loadLocalLogin({ commit }) {
+			const token = localCache.getCache('token');
+			if (token) {
+				commit('changeToken', token);
+			}
+			const userInfo = localCache.getCache('userInfo');
+			if (userInfo) {
+				commit('changeUserInfo', userInfo);
+			}
+			const userMenus = localCache.getCache('userMenus');
+			if (userInfo) {
+				commit('changeUserMenus', userMenus);
+			}
 		}
-		// phoneLoginAction({ commit }, payload: any) {
-		// 	console.log('执行phoneLoginAction', payload);
-		// }
 	}
 };
 

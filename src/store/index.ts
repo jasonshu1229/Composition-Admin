@@ -17,4 +17,11 @@ const store = createStore<IRootState>({
 	}
 });
 
+/**
+ * @description 防止页面刷新，导致vuex数据丢失，确保vuex数据和localStorage里同步
+ */
+export function setupStore() {
+	store.dispatch('login/loadLocalLogin');
+}
+
 export default store;

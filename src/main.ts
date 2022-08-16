@@ -12,6 +12,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 
 import router from './router';
 import store from './store/index';
+import { setupStore } from '@/store';
 
 const app = createApp(App);
 
@@ -23,6 +24,7 @@ const app = createApp(App);
 // app.mount('#app');
 
 app.use(router).use(store).mount('#app');
+setupStore(); // 防止页面刷新，vuex数据丢失
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 	app.component(key, component);
