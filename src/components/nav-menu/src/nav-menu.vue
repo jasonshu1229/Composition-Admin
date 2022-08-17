@@ -13,7 +13,7 @@
 		>
 			<template v-for="item in userMenus" :key="item.id">
 				<template v-if="item.type === 1">
-					<el-sub-menu :index="item.id">
+					<el-sub-menu :index="item.id + ''">
 						<template #title>
 							<el-icon>
 								<View />
@@ -21,7 +21,7 @@
 							<span>{{ item.name }}</span>
 						</template>
 						<template v-for="subitem in item.children" :key="subitem.id">
-							<el-menu-item :index="subitem.id">
+							<el-menu-item :index="subitem.id + ''">
 								<el-icon>
 									<StarFilled />
 								</el-icon>
@@ -31,7 +31,9 @@
 					</el-sub-menu>
 				</template>
 				<template v-else-if="item.type === 2">
-					<span>{{ item.name }}</span>
+					<el-menu-item>
+						<span>{{ item.name }}</span>
+					</el-menu-item>
 				</template>
 			</template>
 		</el-menu>
@@ -80,5 +82,34 @@ export default defineComponent({
 			color: white;
 		}
 	}
+
+	// 目录
+	.el-submenu {
+		background-color: #001529 !important;
+		// 二级菜单 ( 默认背景 )
+		.el-menu-item {
+			padding-left: 50px !important;
+			background-color: #0c2135 !important;
+		}
+	}
+
+	::v-deep .el-submenu__title {
+		background-color: #001529 !important;
+	}
+
+	// hover 高亮
+	.el-menu-item:hover {
+		color: #fff !important; // 菜单
+	}
+
+	.el-menu-item.is-active {
+		color: #fff !important;
+		background-color: #0a60bd !important;
+	}
+}
+
+.el-menu-vertical:not(.el-menu--collapse) {
+	width: 100%;
+	height: calc(100% - 48px);
 }
 </style>
