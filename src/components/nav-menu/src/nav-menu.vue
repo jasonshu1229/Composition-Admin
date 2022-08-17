@@ -2,9 +2,11 @@
 	<div class="nav-menu">
 		<div class="logo">
 			<img class="img" src="~@/assets/img/logo.svg" alt="logo" />
-			<span class="title">Vue3+TS</span>
+			<span v-if="!collapse" class="title">Vue3+TS</span>
 		</div>
 		<el-menu
+			:collapse="collapse"
+			:collapse-transition="true"
 			default-active="2"
 			class="el-menu-vertical"
 			background-color="#0c2135"
@@ -15,9 +17,7 @@
 				<template v-if="item.type === 1">
 					<el-sub-menu :index="item.id + ''">
 						<template #title>
-							<el-icon>
-								<View />
-							</el-icon>
+							<menu-icon :icon="item.icon" />
 							<span>{{ item.name }}</span>
 						</template>
 						<template v-for="subitem in item.children" :key="subitem.id">
@@ -43,15 +43,24 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
 import { useStore } from '@/store';
+import menuIcon from './menu-icon.vue';
+import MenuIcon from 'components/nav-menu/src/menu-icon.vue';
 
 export default defineComponent({
-	name: '',
+	components: { MenuIcon },
+	props: {
+		collapse: {
+			type: Boolean,
+			default: false
+		}
+	},
 	setup() {
 		const store = useStore();
 
 		const userMenus = computed(() => store.state.login.userMenus);
 
 		return {
+			menuIcon,
 			userMenus
 		};
 	}
@@ -81,6 +90,10 @@ export default defineComponent({
 			font-weight: 700;
 			color: white;
 		}
+	}
+
+	.el-menu {
+		border: none;
 	}
 
 	// 目录
