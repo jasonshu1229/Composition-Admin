@@ -12,6 +12,7 @@ import { ILoginState } from './types';
 import { IRootState } from '../types';
 
 import localCache from '@/utils/cache';
+import { mapMenusToRoutes } from '@/utils/map-menu';
 
 const loginModule: Module<ILoginState, IRootState> = {
 	namespaced: true,
@@ -32,6 +33,14 @@ const loginModule: Module<ILoginState, IRootState> = {
 		},
 		changeUserMenus(state, userMenus: any) {
 			state.userMenus = userMenus;
+
+			// 注册动态路由 将 userMenus => routes
+			const routes = mapMenusToRoutes(userMenus);
+			// {path: '/main/analysis/overview', name: 'overview', children: Array(0), component: ƒ}
+			routes.forEach((route) => {
+				// 把遍历到的路由添加到 main 路由的子路由下面
+				router.addRoute('main', route);
+			});
 		}
 	},
 	actions: {
@@ -49,7 +58,7 @@ const loginModule: Module<ILoginState, IRootState> = {
 			localCache.setCache('userInfo', userInfo);
 
 			// 3. 请求角色菜单
-			const userMenusResult = await requestUserMenusByRoleId(id);
+			const userMenusResult = await requestUserMenusByRoleId(userInfo.role.id);
 			const userMenus = userMenusResult.data;
 			commit('changeUserMenus', userMenus);
 			localCache.setCache('userMenus', userMenus);
