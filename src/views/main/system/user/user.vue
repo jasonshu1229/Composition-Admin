@@ -55,10 +55,16 @@ export default defineComponent({
 		const labelWidth = '120px';
 		const itemStyle = '10px 40px';
 
+		// 控制一行显示多少个<el-item>
+		const colLayout = {
+			span: 8
+		};
+
 		return {
 			formItems,
 			labelWidth,
-			itemStyle
+			itemStyle,
+			colLayout
 		};
 	}
 });
