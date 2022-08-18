@@ -15,15 +15,19 @@
 								<el-input
 									:placeholder="item.placeholder"
 									:show-password="item.type === 'password'"
+									v-bind="item.otherOptions"
 								/>
 							</template>
 							<template v-else-if="item.type === 'select'">
-								<el-select :placeholder="item.placeholder" style="width: 100%">
+								<el-select
+									:placeholder="item.placeholder"
+									style="width: 100%"
+									v-bind="item.otherOptions"
+								>
 									<el-option
 										v-for="option in item.options"
 										:key="option.value"
 										:value="option.value"
-										v-bind="item.otherOptions"
 									>
 										{{ option.title }}
 									</el-option>
@@ -50,6 +54,7 @@ import { IFormItem } from '../types';
 export default defineComponent({
 	props: {
 		formItems: {
+			// 当传进来的属性类型是数组或函数时，要通过 PropType 定义，进而通过泛型确认数组里元素的类型
 			type: Array as PropType<IFormItem[]>,
 			default: () => []
 		},
