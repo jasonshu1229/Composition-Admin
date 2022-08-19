@@ -1,4 +1,5 @@
 import { RouteRecordRaw } from 'vue-router';
+import { IBreadcrumb } from '@/bast-ui/breadcrumb';
 
 let firstMenu: any = null; // 项目首次加载的默认路由
 
@@ -43,19 +44,51 @@ export function mapMenusToRoutes(userMenus: any[]): RouteRecordRaw[] {
 }
 
 /**
- * @description 将当前路径映射成对应菜单路径
+ * @description 将当前路径映射成对应菜单路由（二级菜单路由）
  * @param userMenus 角色菜单
  * @param currentPath 当前路径
  */
-export function pathMapToMenu(userMenus: any[], currentPath: string): any {
+// export function pathMapToMenu(userMenus: any[], currentPath: string): any {
+// 	for (const menu of userMenus) {
+// 		if (menu.type === 1) {
+// 			// 当前是一级菜单，但包含children，还有二级菜单
+// 			const findMenu = pathMapToMenu(menu.children ?? [], currentPath);
+// 			if (findMenu) {
+// 				return findMenu;
+// 			}
+// 		} else if (menu.type === 2 && menu.url === currentPath) {
+// 			return menu;
+// 		}
+// 	}
+// }
+
+export function pathMapBreadcrumbs(userMenus: any[], currentPath: string) {
+	const breadcrumbs: IBreadcrumb[] = [];
+	pathMapToMenu(userMenus, currentPath, breadcrumbs);
+	return breadcrumbs;
+}
+
+/**
+ * @description 将当前路径通过菜单路由匹配规则生成相应路由
+ * @param userMenus 角色菜单
+ * @param currentPath 当前路径
+ * @param breadcrumbs 面包屑配置数据
+ */
+export function pathMapToMenu(
+	userMenus: any[],
+	currentPath: string,
+	breadcrumbs?: IBreadcrumb[]
+): any {
 	for (const menu of userMenus) {
 		if (menu.type === 1) {
-			// 当前是一级菜单，但包含children，还有二级菜单
-			const findMenu = pathMapToMenu(menu.children ?? [], currentPath);
-			if (findMenu) {
-				return findMenu;
+			const findSecondMenu = pathMapToMenu(menu.children ?? [], currentPath);
+			if (findSecondMenu) {
+				breadcrumbs?.push({ name: menu.name });
+				breadcrumbs?.push({ name: findSecondMenu.name });
+				return findSecondMenu;
 			}
 		} else if (menu.type === 2 && menu.url === currentPath) {
+			// 只返回二级菜单
 			return menu;
 		}
 	}

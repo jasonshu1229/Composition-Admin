@@ -9,21 +9,25 @@
 			</template>
 		</el-icon>
 		<div class="content">
-			<nav-breadcrumb />
+			<sh-breadcrumb :breadcrumbs="breadcrumbs" />
 			<user-info />
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
 import userInfo from './user-info.vue';
-import navBreadcrumb from './nav-breadcrumb.vue';
+import ShBreadcrumb, { IBreadcrumb } from '@/bast-ui/breadcrumb';
+import { pathMapBreadcrumbs } from '@/utils/map-menu';
+
+import { useStore } from '@/store';
+import { useRoute } from 'vue-router';
 
 export default defineComponent({
 	name: 'nav-header',
 	components: {
-		navBreadcrumb,
+		ShBreadcrumb,
 		userInfo
 	},
 	emits: ['foldChange'],
@@ -34,8 +38,18 @@ export default defineComponent({
 			emit('foldChange', isFold.value);
 		};
 
+		// 面包屑的数据
+		const store = useStore();
+		const breadcrumbs = computed(() => {
+			const route = useRoute();
+			const currentPath = route.path;
+			const userMenus = store.state.login.userMenus;
+			return pathMapBreadcrumbs(userMenus, currentPath);
+		});
+
 		return {
 			isFold,
+			breadcrumbs,
 			handleFoldClick
 		};
 	}
