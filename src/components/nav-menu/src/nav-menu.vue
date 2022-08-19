@@ -7,7 +7,7 @@
 		<el-menu
 			:collapse="collapse"
 			:collapse-transition="true"
-			default-active="2"
+			:default-active="defaultActiveValue"
 			class="el-menu-vertical"
 			background-color="#0c2135"
 			text-color="#b7bdc3"
@@ -44,11 +44,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue';
+import { defineComponent, computed, ref } from 'vue';
 import { useStore } from '@/store';
 import menuIcon from './menu-icon.vue';
 import MenuIcon from 'components/nav-menu/src/menu-icon.vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
+import { pathMapToMenu } from '@/utils/map-menu';
 
 export default defineComponent({
 	components: { MenuIcon },
@@ -60,10 +61,16 @@ export default defineComponent({
 	},
 	setup() {
 		const store = useStore();
-
-		const router = useRouter();
-
 		const userMenus = computed(() => store.state.login.userMenus);
+
+		const router = useRouter(); // 用来跳转的
+		const route = useRoute(); // 当前路由对象
+		// 获取当前path，需要进行路由匹配
+		const currentPath = route.path;
+		const menu = pathMapToMenu(userMenus.value, currentPath);
+
+		const defaultActiveValue = ref(menu.id + '');
+
 		const handleMenuItemClick = (item: any) => {
 			router.push({
 				path: item.url ?? '/not-found'
@@ -73,6 +80,7 @@ export default defineComponent({
 		return {
 			menuIcon,
 			userMenus,
+			defaultActiveValue,
 			handleMenuItemClick
 		};
 	}

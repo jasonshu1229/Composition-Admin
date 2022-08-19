@@ -1,5 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
 
+let firstMenu: any = null; // 项目首次加载的默认路由
+
 /**
  * @description 将用户角色拥有的菜单树映射成角色所属路由
  * @param userMenus 角色菜单树
@@ -26,6 +28,9 @@ export function mapMenusToRoutes(userMenus: any[]): RouteRecordRaw[] {
 			if (menu.type === 2) {
 				const route = allRoutes.find((route) => route.path === menu.url);
 				if (route) routes.push(route);
+				if (!firstMenu) {
+					firstMenu = menu; // 保存第一个菜单
+				}
 			} else {
 				_recurseGetRoute(menu.children);
 			}
@@ -36,3 +41,24 @@ export function mapMenusToRoutes(userMenus: any[]): RouteRecordRaw[] {
 
 	return routes;
 }
+
+/**
+ * @description 将当前路径映射成对应菜单路径
+ * @param userMenus 角色菜单
+ * @param currentPath 当前路径
+ */
+export function pathMapToMenu(userMenus: any[], currentPath: string): any {
+	for (const menu of userMenus) {
+		if (menu.type === 1) {
+			// 当前是一级菜单，但包含children，还有二级菜单
+			const findMenu = pathMapToMenu(menu.children ?? [], currentPath);
+			if (findMenu) {
+				return findMenu;
+			}
+		} else if (menu.type === 2 && menu.url === currentPath) {
+			return menu;
+		}
+	}
+}
+
+export { firstMenu };
