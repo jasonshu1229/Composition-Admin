@@ -9,6 +9,7 @@ export interface IFormItem {
 	options?: any[];
 	// 针对特殊的属性 比如 datePicker
 	otherOptions?: any;
+	field: string;
 }
 
 export interface IForm {

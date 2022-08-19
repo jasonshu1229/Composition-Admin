@@ -16,6 +16,7 @@
 									:placeholder="item.placeholder"
 									:show-password="item.type === 'password'"
 									v-bind="item.otherOptions"
+									v-model="formData[`${item.field}`]"
 								/>
 							</template>
 							<template v-else-if="item.type === 'select'">
@@ -23,6 +24,7 @@
 									:placeholder="item.placeholder"
 									style="width: 100%"
 									v-bind="item.otherOptions"
+									v-model="formData[`${item.field}`]"
 								>
 									<el-option
 										v-for="option in item.options"
@@ -37,6 +39,7 @@
 								<el-date-picker
 									style="width: 100%"
 									v-bind="item.otherOptions"
+									v-model="formData[`${item.field}`]"
 								></el-date-picker>
 							</template>
 						</el-form-item>
@@ -48,11 +51,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType, ref, watch } from 'vue';
 import { IFormItem } from '../types';
 
 export default defineComponent({
 	props: {
+		modelValue: {
+			type: Object,
+			required: true
+		},
 		formItems: {
 			// 当传进来的属性类型是数组或函数时，要通过 PropType 定义，进而通过泛型确认数组里元素的类型
 			type: Array as PropType<IFormItem[]>,
@@ -77,7 +84,27 @@ export default defineComponent({
 			})
 		}
 	},
-	name: 'form'
+	name: 'form',
+	emits: ['update:modelValue'],
+	setup(props, { emit }) {
+		// sh-form 组件上 v-model 双向绑定数据
+		const formData = ref({ ...props.modelValue });
+
+		watch(
+			formData,
+			(newValue) => {
+				console.log(newValue);
+				emit('update:modelValue', newValue);
+			},
+			{
+				deep: true
+			}
+		);
+
+		return {
+			formData
+		};
+	}
 });
 </script>
 
