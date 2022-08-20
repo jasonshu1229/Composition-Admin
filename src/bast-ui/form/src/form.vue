@@ -1,5 +1,8 @@
 <template>
 	<div class="sh-form">
+		<div class="header">
+			<slot name="header"></slot>
+		</div>
 		<el-form :label-width="labelWidth">
 			<el-row>
 				<template v-for="item in formItems" :key="item.label">
@@ -47,6 +50,9 @@
 				</template>
 			</el-row>
 		</el-form>
+		<div class="footer">
+			<slot name="footer"></slot>
+		</div>
 	</div>
 </template>
 
@@ -84,7 +90,7 @@ export default defineComponent({
 			})
 		}
 	},
-	name: 'form',
+	name: 'sh-form',
 	emits: ['update:modelValue'],
 	setup(props, { emit }) {
 		// sh-form 组件上 v-model 双向绑定数据
