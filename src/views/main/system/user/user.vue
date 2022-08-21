@@ -1,12 +1,18 @@
 <template>
 	<div class="user">
 		<page-search :searchFormConfig="searchFormConfig" />
+
 		<div class="tabel-content">
-			<el-table :data="userList" border style="width: 100%">
-				<template v-for="propItem in propList" :key="propItem.prop">
-					<el-table-column v-bind="propItem" align="center" />
+			<sh-table :listData="userList" :propList="propList">
+				<template #status="scope">
+					<el-button class="primary"
+						>{{ scope.row.enable ? '启用' : '禁用' }}
+					</el-button>
 				</template>
-			</el-table>
+				<template #createAt="scope">
+					<strong class="primary">{{ scope.row.createAt }}</strong>
+				</template>
+			</sh-table>
 		</div>
 	</div>
 </template>
@@ -14,12 +20,13 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
 import PageSearch from '@/components/page-search';
+import ShTable from '@/bast-ui/table/index';
 import { searchFormConfig } from './config/search.config';
 import { useStore } from '@/store';
 
 export default defineComponent({
 	name: 'user',
-	components: { PageSearch },
+	components: { PageSearch, ShTable },
 	setup() {
 		const store = useStore();
 		store.dispatch('system/getPageListAction', {
@@ -37,8 +44,13 @@ export default defineComponent({
 			{ prop: 'name', label: '用户名', midWidth: '100' },
 			{ prop: 'realname', label: '真实姓名', midWidth: '100' },
 			{ prop: 'cellphone', label: '手机号码', midWidth: '100' },
-			{ prop: 'enable', label: '状态', midWidth: '100' },
-			{ prop: 'createAt', label: '创建时间', midWidth: '250' },
+			{ prop: 'enable', label: '状态', midWidth: '100', slotName: 'status' },
+			{
+				prop: 'createAt',
+				label: '创建时间',
+				midWidth: '250',
+				slotName: 'createAt'
+			},
 			{ prop: 'updateAt', label: '更新时间', midWidth: '250' }
 		];
 
