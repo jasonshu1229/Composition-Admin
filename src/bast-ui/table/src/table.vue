@@ -20,7 +20,7 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-	name: 'table',
+	name: 'sh-table',
 	props: {
 		listData: {
 			type: Array, // 不好判断数组里面都什么元素和类型 所以不用 as PropType

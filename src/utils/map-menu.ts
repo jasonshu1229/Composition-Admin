@@ -62,6 +62,11 @@ export function mapMenusToRoutes(userMenus: any[]): RouteRecordRaw[] {
 // 	}
 // }
 
+/**
+ * @description 将路径映射成面包屑需要的数据
+ * @param userMenus 角色菜单
+ * @param currentPath 当前路径
+ */
 export function pathMapBreadcrumbs(userMenus: any[], currentPath: string) {
 	const breadcrumbs: IBreadcrumb[] = [];
 	pathMapToMenu(userMenus, currentPath, breadcrumbs);

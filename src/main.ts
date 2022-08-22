@@ -14,9 +14,11 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 import router from './router';
 import store from './store/index';
 import { setupStore } from '@/store';
+import { globalRegister } from '@/global';
 
 const app = createApp(App);
 
+app.use(globalRegister);
 app.use(store);
 
 setupStore(); // 防止页面刷新，vuex数据丢失

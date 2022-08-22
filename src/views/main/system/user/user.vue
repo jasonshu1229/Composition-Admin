@@ -5,12 +5,19 @@
 		<div class="tabel-content">
 			<sh-table :listData="userList" :propList="propList">
 				<template #status="scope">
-					<el-button class="primary"
+					<el-button
+						class="primary"
+						plain
+						size="small"
+						:type="scope.row.enable ? 'success' : 'danger'"
 						>{{ scope.row.enable ? '启用' : '禁用' }}
 					</el-button>
 				</template>
 				<template #createAt="scope">
-					<strong class="primary">{{ scope.row.createAt }}</strong>
+					<span>{{ $filters.formatTime(scope.row.createAt) }}</span>
+				</template>
+				<template #updateAt="scope">
+					<span>{{ $filters.formatTime(scope.row.updateAt) }}</span>
 				</template>
 			</sh-table>
 		</div>
@@ -51,7 +58,12 @@ export default defineComponent({
 				midWidth: '250',
 				slotName: 'createAt'
 			},
-			{ prop: 'updateAt', label: '更新时间', midWidth: '250' }
+			{
+				prop: 'updateAt',
+				label: '更新时间',
+				midWidth: '250',
+				slotName: 'updateAt'
+			}
 		];
 
 		return {
