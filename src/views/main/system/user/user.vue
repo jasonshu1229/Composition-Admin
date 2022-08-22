@@ -1,9 +1,31 @@
 <template>
 	<div class="user">
 		<page-search :searchFormConfig="searchFormConfig" />
-
 		<div class="tabel-content">
-			<sh-table :listData="userList" :propList="propList">
+			<sh-table
+				:listData="userList"
+				:propList="propList"
+				:tableTitle="tableTitle"
+				:showIndexColumn="showIndexColumn"
+				:showSelectColumn="showSelectColumn"
+			>
+				<!--	1.header中的插槽 -->
+				<template #headerHandler>
+					<el-button type="primary">
+						<el-icon>
+							<CirclePlus />
+						</el-icon>
+						<span>新增用户</span>
+					</el-button>
+					<el-button type="primary" plain>
+						<el-icon>
+							<Download />
+						</el-icon>
+						<span>导出用户数据</span>
+					</el-button>
+				</template>
+
+				<!--	列中的插槽 -->
 				<template #status="scope">
 					<el-button
 						class="primary"
@@ -18,6 +40,22 @@
 				</template>
 				<template #updateAt="scope">
 					<span>{{ $filters.formatTime(scope.row.updateAt) }}</span>
+				</template>
+				<template #handler>
+					<div class="handle-btns">
+						<el-button size="small" type="primary" link>
+							<el-icon>
+								<Edit />
+							</el-icon>
+							编辑
+						</el-button>
+						<el-button size="small" type="primary" link>
+							<el-icon>
+								<Delete />
+							</el-icon>
+							删除
+						</el-button>
+					</div>
 				</template>
 			</sh-table>
 		</div>
@@ -63,14 +101,26 @@ export default defineComponent({
 				label: '更新时间',
 				midWidth: '250',
 				slotName: 'updateAt'
+			},
+			{
+				label: '操作',
+				minWidth: '80',
+				slotName: 'handler'
 			}
 		];
 
+		const tableTitle = '用户列表';
+		const showIndexColumn = true;
+		const showSelectColumn = true;
+
 		return {
 			searchFormConfig,
+			tableTitle,
 			userList,
 			userCount,
-			propList
+			propList,
+			showIndexColumn,
+			showSelectColumn
 		};
 	}
 });

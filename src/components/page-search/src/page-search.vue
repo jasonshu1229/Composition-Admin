@@ -1,9 +1,6 @@
 <template>
 	<div class="page-search">
 		<sh-form v-bind="searchFormConfig" v-model="formData">
-			<template #header>
-				<h2 class="header">高级检索</h2>
-			</template>
 			<template #footer>
 				<div class="handle-formBtn">
 					<el-button>

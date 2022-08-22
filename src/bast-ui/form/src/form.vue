@@ -1,8 +1,5 @@
 <template>
 	<div class="sh-form">
-		<div class="header">
-			<slot name="header"></slot>
-		</div>
 		<el-form :label-width="labelWidth">
 			<el-row>
 				<template v-for="item in formItems" :key="item.label">
