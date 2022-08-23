@@ -34,6 +34,7 @@ declare module '@vue/runtime-core' {
     ElRow: typeof import('element-plus/es')['ElRow']
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
+    ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
@@ -45,6 +46,7 @@ declare module '@vue/runtime-core' {
     PageSearch: typeof import('./src/components/page-search/src/page-search.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SwitchDark: typeof import('./src/components/switch-dark/src/switch-dark.vue')['default']
     UserInfo: typeof import('./src/components/nav-header/src/user-info.vue')['default']
   }
 }

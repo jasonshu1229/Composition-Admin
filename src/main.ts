@@ -20,6 +20,10 @@ import store from './store/index';
 import { setupStore } from '@/store';
 import { globalRegister } from '@/global';
 
+// 引入暗黑主题样式文件
+import 'element-plus/theme-chalk/dark/css-vars.css';
+import '@/assets/css/element-dark.less';
+
 const app = createApp(App);
 
 app.use(globalRegister);

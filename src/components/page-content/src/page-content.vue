@@ -1,5 +1,5 @@
 <template>
-	<div class="page-content">
+	<div class="page-content-table">
 		<sh-table :listData="userList" v-bind="contentTableConfig">
 			<!--	1.header中的插槽 -->
 			<template #headerHandler>
@@ -91,7 +91,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="less">
-.page-content {
+.page-content-table {
 	border-top: 20px solid #f5f5f5;
 	padding: 20px;
 }

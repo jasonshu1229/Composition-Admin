@@ -9,17 +9,24 @@
 			</template>
 		</el-icon>
 		<div class="content">
-			<sh-breadcrumb :breadcrumbs="breadcrumbs" />
-			<user-info />
+			<div class="header-le">
+				<sh-breadcrumb :breadcrumbs="breadcrumbs" />
+			</div>
+			<div class="header-ri">
+				<SwitchDark />
+				<user-info />
+			</div>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue';
+import { pathMapBreadcrumbs } from '@/utils/map-menu';
+
 import userInfo from './user-info.vue';
 import ShBreadcrumb from '@/bast-ui/breadcrumb';
-import { pathMapBreadcrumbs } from '@/utils/map-menu';
+import SwitchDark from '@/components/switch-dark';
 
 import { useStore } from '@/store';
 import { useRoute } from 'vue-router';
@@ -28,7 +35,8 @@ export default defineComponent({
 	name: 'nav-header',
 	components: {
 		ShBreadcrumb,
-		userInfo
+		userInfo,
+		SwitchDark
 	},
 	emits: ['foldChange'],
 	setup(props, { emit }) {
@@ -73,6 +81,20 @@ export default defineComponent({
 		justify-content: space-between;
 		align-items: center;
 		padding: 0 20px;
+
+		.header-le {
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+		}
+
+		.header-ri {
+			height: 100%;
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-self: flex-end;
+		}
 	}
 }
 </style>
