@@ -18,7 +18,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue';
 import userInfo from './user-info.vue';
-import ShBreadcrumb, { IBreadcrumb } from '@/bast-ui/breadcrumb';
+import ShBreadcrumb from '@/bast-ui/breadcrumb';
 import { pathMapBreadcrumbs } from '@/utils/map-menu';
 
 import { useStore } from '@/store';
