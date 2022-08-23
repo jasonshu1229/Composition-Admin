@@ -47,13 +47,13 @@
 							<el-icon>
 								<Edit />
 							</el-icon>
-							编辑
+							<span> 编辑 </span>
 						</el-button>
 						<el-button size="small" type="primary" link>
 							<el-icon>
 								<Delete />
 							</el-icon>
-							删除
+							<span>删除</span>
 						</el-button>
 					</div>
 				</template>

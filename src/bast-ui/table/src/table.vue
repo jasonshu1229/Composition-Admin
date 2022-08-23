@@ -40,7 +40,20 @@
 			</template>
 		</el-table>
 		<div class="footer">
-			<slot name="footer"></slot>
+			<slot name="footer">
+				<el-pagination
+					v-model:currentPage="currentPage4"
+					v-model:page-size="pageSize4"
+					:page-sizes="[100, 200, 300, 400]"
+					:small="small"
+					:disabled="disabled"
+					:background="background"
+					layout="total, sizes, prev, pager, next, jumper"
+					:total="400"
+					@size-change="handleSizeChange"
+					@current-change="handleCurrentChange"
+				/>
+			</slot>
 		</div>
 	</div>
 </template>
@@ -108,6 +121,8 @@ export default defineComponent({
 
 	.el-pagination {
 		text-align: right;
+		// 具有flex属性的div，text-align 会失效，需要加一下下面的属性进行兼容
+		justify-content: flex-end;
 	}
 }
 </style>
