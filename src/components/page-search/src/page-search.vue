@@ -9,7 +9,7 @@
 						</el-icon>
 						<span>重置</span>
 					</el-button>
-					<el-button type="primary">
+					<el-button type="primary" @click="handleQueryClick">
 						<el-icon>
 							<Search />
 						</el-icon>
@@ -36,7 +36,8 @@ export default defineComponent({
 	components: {
 		ShForm
 	},
-	setup(props) {
+	emits: ['resetBtnClick', 'queryBtnClick'],
+	setup(props, { emit }) {
 		// 双向绑定的属性应该是由配置文件的field来决定
 		// formData中的属性应该由 searchFormConfig中的 field 属性 动态来决定
 		const formItems = props.searchFormConfig?.formItems ?? [];
@@ -56,10 +57,21 @@ export default defineComponent({
 			for (const key in formOriginData) {
 				formData.value[`${key}`] = formOriginData[key];
 			}
+			// 向 user 组件发出自定义事件
+			emit('resetBtnClick');
 		};
+
+		/**
+		 * @description 按用户输入条件进行搜索
+		 */
+		const handleQueryClick = () => {
+			emit('queryBtnClick', formData.value);
+		};
+
 		return {
 			formData,
-			handleResetClick
+			handleResetClick,
+			handleQueryClick
 		};
 	}
 });
