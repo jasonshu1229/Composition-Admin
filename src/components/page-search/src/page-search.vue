@@ -3,17 +3,17 @@
 		<sh-form v-bind="searchFormConfig" v-model="formData">
 			<template #footer>
 				<div class="handle-formBtn">
-					<el-button>
+					<el-button @click="handleResetClick">
 						<el-icon>
 							<Refresh />
 						</el-icon>
-						重置
+						<span>重置</span>
 					</el-button>
 					<el-button type="primary">
 						<el-icon>
 							<Search />
 						</el-icon>
-						搜索
+						<span>搜索</span>
 					</el-button>
 				</div>
 			</template>
@@ -36,16 +36,30 @@ export default defineComponent({
 	components: {
 		ShForm
 	},
-	setup() {
-		const formData = ref({
-			id: '',
-			name: '',
-			password: '',
-			singer: '',
-			createTime: ''
-		});
+	setup(props) {
+		// 双向绑定的属性应该是由配置文件的field来决定
+		// formData中的属性应该由 searchFormConfig中的 field 属性 动态来决定
+		const formItems = props.searchFormConfig?.formItems ?? [];
+		const formOriginData: any = {};
+		for (const item of formItems) {
+			formOriginData[item.field] = '';
+		}
+		const formData = ref(formOriginData);
+
+		/**
+		 * @description 清空用户输入的数据
+		 * 在 form 组件里，formData = ref({ ...props.modelValue })
+		 * 	直接赋值不能直接影响到 formData，进而不会清空重置
+		 * 	需要更改 formData 里面的属性
+		 */
+		const handleResetClick = () => {
+			for (const key in formOriginData) {
+				formData.value[`${key}`] = formOriginData[key];
+			}
+		};
 		return {
-			formData
+			formData,
+			handleResetClick
 		};
 	}
 });
