@@ -82,18 +82,10 @@ export default defineComponent({
 		align-items: center;
 		padding: 0 20px;
 
-		.header-le {
-			display: flex;
-			align-items: center;
-			justify-content: flex-start;
-		}
-
 		.header-ri {
-			height: 100%;
-			width: 100%;
 			display: flex;
 			align-items: center;
-			justify-self: flex-end;
+			justify-content: center;
 		}
 	}
 }

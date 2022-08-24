@@ -37,6 +37,10 @@ export default defineComponent({
 </script>
 
 <style scoped lang="less">
+.user-info {
+	margin-left: 12px;
+}
+
 .el-dropdown-link {
 	cursor: pointer;
 	color: #333333;
