@@ -8,18 +8,18 @@ const systemModule: Module<ISystemState, IRootState> = {
 	namespaced: true,
 	state() {
 		return {
-			userList: [],
-			userCount: 0,
+			usersList: [],
+			usersCount: 0,
 			roleList: [],
 			roleCount: 0
 		};
 	},
 	mutations: {
-		changeUsersList(state, userList: any[]) {
-			state.userList = userList;
+		changeUsersList(state, usersList: any[]) {
+			state.usersList = usersList;
 		},
-		changeUsersCount(state, userCount: number) {
-			state.userCount = userCount;
+		changeUsersCount(state, usersCount: number) {
+			state.usersCount = usersCount;
 		},
 		changeRoleList(state, roleList: any[]) {
 			state.roleList = roleList;
@@ -31,12 +31,14 @@ const systemModule: Module<ISystemState, IRootState> = {
 	getters: {
 		pageTableListData(state) {
 			return (pageName: string) => {
-				switch (pageName) {
-					case 'users':
-						return state.userList;
-					case 'role':
-						return state.roleList;
-				}
+				// 不将state 断言成any类型，会报错，因为 state 推导下来是 ISystemState 类型
+				return (state as any)[`${pageName}List`];
+				// switch (pageName) {
+				// 	case 'users':
+				// 		return state.usersList;
+				// 	case 'role':
+				// 		return state.roleList;
+				// }
 			};
 		}
 	},
@@ -55,8 +57,10 @@ const systemModule: Module<ISystemState, IRootState> = {
 			// 3. 将数据存储到state中
 			const { list, totalCount } = pageResult.data;
 
+			// 类型断言成 string，方便有api提示
 			const changePageName =
-				pageName.slice(0, 1).toUpperCase() + pageName.slice(1);
+				(pageName.slice(0, 1) as string).toUpperCase() + pageName.slice(1);
+
 			commit(`change${changePageName}List`, list);
 			commit(`change${changePageName}Count`, totalCount);
 		}
