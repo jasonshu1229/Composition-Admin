@@ -2,9 +2,9 @@ import { IForm } from '@/bast-ui/form';
 
 export const searchFormConfig: IForm = {
 	labelWidth: '120px',
-	itemStyle: {
-		padding: '10px 40px'
-	},
+	// itemStyle: {
+	// 	padding: '10px 40px'
+	// },
 	// 控制一行显示多少个<el-item>
 	// colLayout: {
 	// 	span: 24

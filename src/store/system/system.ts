@@ -9,33 +9,56 @@ const systemModule: Module<ISystemState, IRootState> = {
 	state() {
 		return {
 			userList: [],
-			userCount: 0
+			userCount: 0,
+			roleList: [],
+			roleCount: 0
 		};
 	},
 	mutations: {
-		changeUserList(state, userList: any[]) {
+		changeUsersList(state, userList: any[]) {
 			state.userList = userList;
 		},
-		changeUserCount(state, userCount: number) {
+		changeUsersCount(state, userCount: number) {
 			state.userCount = userCount;
+		},
+		changeRoleList(state, roleList: any[]) {
+			state.roleList = roleList;
+		},
+		changeRoleCount(state, roleCount: number) {
+			state.roleCount = roleCount;
+		}
+	},
+	getters: {
+		pageTableListData(state) {
+			return (pageName: string) => {
+				switch (pageName) {
+					case 'users':
+						return state.userList;
+					case 'role':
+						return state.roleList;
+				}
+			};
 		}
 	},
 	actions: {
 		async getPageListAction({ commit }, payload: any) {
-			// payload：{pageUrl: 'user/list', queryInfo: {…}}
+			// 1. 获取pageUrl
+			const pageName = payload.pageName;
+			const pageUrl = `/${pageName}/list`;
 
-			console.log(payload.pageUrl);
+			console.log(pageUrl);
 			console.log(payload.queryInfo);
 
-			// 1. 对页面发生请求
-			const pageResult = await getPageListData(
-				payload.pageUrl,
-				payload.queryInfo
-			);
+			// 2. 对页面发生请求
+			const pageResult = await getPageListData(pageUrl, payload.queryInfo);
 
+			// 3. 将数据存储到state中
 			const { list, totalCount } = pageResult.data;
-			commit('changeUserList', list);
-			commit('changeUserCount', totalCount);
+
+			const changePageName =
+				pageName.slice(0, 1).toUpperCase() + pageName.slice(1);
+			commit(`change${changePageName}List`, list);
+			commit(`change${changePageName}Count`, totalCount);
 		}
 	}
 };

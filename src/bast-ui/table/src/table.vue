@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
 	name: 'sh-table',
@@ -88,7 +88,21 @@ export default defineComponent({
 			emit('selectionChange', value);
 		};
 
+		const small = ref(false);
+		const disabled = ref(false);
+
+		const handleSizeChange = (val: number) => {
+			console.log(`${val} items per page`);
+		};
+		const handleCurrentChange = (val: number) => {
+			console.log(`current page: ${val}`);
+		};
+
 		return {
+			small,
+			disabled,
+			handleSizeChange,
+			handleCurrentChange,
 			handleSelectionChange
 		};
 	}
