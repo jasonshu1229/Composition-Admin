@@ -28,7 +28,7 @@
 				width="80"
 			></el-table-column>
 			<template v-for="propItem in propList" :key="propItem.prop">
-				<el-table-column v-bind="propItem" align="center">
+				<el-table-column v-bind="propItem" align="center" show-overflow-tooltip>
 					<template #default="scope">
 						<!--插槽的名字不能写死，否则只能改对应的列-->
 						<!-- :name 更改对应插槽的列，:row 将插槽里的信息传递到外层使用的组件中						-->

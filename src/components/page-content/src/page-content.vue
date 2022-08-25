@@ -54,6 +54,17 @@
 					</el-button>
 				</div>
 			</template>
+
+			<!--	3. 在page-content中动态插入剩余的插槽：一方面兼顾sh-table，另一方面还要给goods 留个插槽		-->
+			<template
+				v-for="item in otherPropSlots"
+				:key="item.prop"
+				#[item.slotName]="scope"
+			>
+				<template v-if="item.slotName">
+					<slot :name="item.slotName" :row="scope.row"></slot>
+				</template>
+			</template>
 		</sh-table>
 	</div>
 </template>
@@ -82,12 +93,12 @@ export default defineComponent({
 	setup(props) {
 		const store = useStore();
 
-		// 双向绑定一个 pageInfo，需要将它绑定到 table 内部
+		// 1. 双向绑定一个 pageInfo，需要将它绑定到 table 内部
 		const pageInfo = ref({ currentPage: 0, pageSize: 10 });
 		// 当pageInfo 改变之后，应该 watch 下，再次请求数据
 		watch(pageInfo, () => getPageData());
 
-		// 发送网络请求
+		// 2. 发送网络请求
 		const getPageData = (queryInfo: any = {}) => {
 			store.dispatch('system/getPageListAction', {
 				pageName: props.pageName,
@@ -101,7 +112,7 @@ export default defineComponent({
 
 		getPageData();
 
-		// 从vuex中获取数据
+		// 3. 从vuex中获取数据
 		const dataList = computed(() =>
 			store.getters[`system/pageTableListData`](props.pageName)
 		);
@@ -109,10 +120,23 @@ export default defineComponent({
 			store.getters[`system/pageListTableCount`](props.pageName)
 		);
 
+		// 4. 获取其他的动态插槽名称，排除固定的四个
+		const otherPropSlots = props.contentTableConfig?.propList.filter(
+			(item: any) => {
+				if (item.slotName === 'status') return false;
+				if (item.slotName === 'createAt') return false;
+				if (item.slotName === 'updateAt') return false;
+				if (item.slotName === 'handler') return false;
+
+				return true;
+			}
+		);
+
 		return {
 			dataList,
 			dataCount,
 			pageInfo,
+			otherPropSlots,
 			getPageData
 		};
 	}
@@ -123,5 +147,18 @@ export default defineComponent({
 .page-content-table {
 	border-top: 20px solid #f5f5f5;
 	padding: 20px;
+}
+
+.demo-image__error .image-slot {
+	font-size: 30px;
+}
+
+.demo-image__error .image-slot .el-icon {
+	font-size: 30px;
+}
+
+.demo-image__error .el-image {
+	width: 100%;
+	height: 200px;
 }
 </style>
