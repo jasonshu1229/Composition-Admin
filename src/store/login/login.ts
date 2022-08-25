@@ -18,6 +18,7 @@ const loginModule: Module<ILoginState, IRootState> = {
 	namespaced: true,
 	state() {
 		return {
+			isDark: false,
 			token: '',
 			userInfo: {},
 			userMenus: []
@@ -25,6 +26,10 @@ const loginModule: Module<ILoginState, IRootState> = {
 	},
 	getters: {},
 	mutations: {
+		changeTheme(state, newValue: boolean) {
+			console.log('newValue', newValue);
+			state.isDark = newValue;
+		},
 		changeToken(state, token: string) {
 			state.token = token;
 		},
@@ -44,6 +49,10 @@ const loginModule: Module<ILoginState, IRootState> = {
 		}
 	},
 	actions: {
+		switchTheme({ commit }, payload: boolean) {
+			commit('changeTheme', payload);
+			localCache.setCache('isDark', payload);
+		},
 		async accountLoginAction({ commit }, payload: IAccount) {
 			// 1. 实现登录逻辑
 			const loginResult = await accountLoginRequest(payload);
@@ -67,6 +76,10 @@ const loginModule: Module<ILoginState, IRootState> = {
 			await router.push('/main');
 		},
 		loadLocalLogin({ commit }) {
+			const isDark = localCache.getCache('isDark');
+			if (isDark) {
+				commit('changeTheme', isDark);
+			}
 			const token = localCache.getCache('token');
 			if (token) {
 				commit('changeToken', token);

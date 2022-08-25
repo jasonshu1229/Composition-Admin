@@ -6,18 +6,34 @@
 		inactive-color="#dcdfe6"
 		:active-icon="Sunny"
 		:inactive-icon="Moon"
-		@click="handleSwitchDark()"
+		@click="handleSwitchDark"
 	></el-switch>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, computed, onMounted } from 'vue';
 import { Sunny, Moon } from '@element-plus/icons-vue';
+import { useStore } from '@/store';
 
 export default defineComponent({
 	name: 'switch-dark',
 	setup() {
-		const isDark = ref<boolean>(false);
+		const store = useStore();
+
+		const isDark = computed({
+			get: function () {
+				return store.state.login.isDark;
+			},
+			set: function (newValue) {
+				store.dispatch('login/switchTheme', newValue);
+			}
+		});
+
+		onMounted(() => {
+			if (isDark.value) {
+				handleSwitchDark();
+			}
+		});
 
 		// 暗黑主题之间切换
 		const handleSwitchDark = () => {
