@@ -1,6 +1,11 @@
 <template>
 	<div class="page-content-table">
-		<sh-table :listData="dataList" v-bind="contentTableConfig">
+		<sh-table
+			:listData="dataList"
+			:listCount="dataCount"
+			v-bind="contentTableConfig"
+			v-model:page="pageInfo"
+		>
 			<!--	1.header中的插槽 -->
 			<template #headerHandler>
 				<el-button type="primary">
@@ -54,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 import { useStore } from '@/store';
 
 import ShTable from '@/bast-ui/table';
@@ -77,13 +82,18 @@ export default defineComponent({
 	setup(props) {
 		const store = useStore();
 
+		// 双向绑定一个 pageInfo，需要将它绑定到 table 内部
+		const pageInfo = ref({ currentPage: 0, pageSize: 10 });
+		// 当pageInfo 改变之后，应该 watch 下，再次请求数据
+		watch(pageInfo, () => getPageData());
+
 		// 发送网络请求
 		const getPageData = (queryInfo: any = {}) => {
 			store.dispatch('system/getPageListAction', {
 				pageName: props.pageName,
 				queryInfo: {
-					offset: 0,
-					size: 10,
+					offset: pageInfo.value.currentPage * pageInfo.value.pageSize,
+					size: pageInfo.value.pageSize,
 					...queryInfo
 				}
 			});
@@ -95,10 +105,14 @@ export default defineComponent({
 		const dataList = computed(() =>
 			store.getters[`system/pageTableListData`](props.pageName)
 		);
-		// const userCount = computed(() => store.state.system.userCount);
+		const dataCount = computed(() =>
+			store.getters[`system/pageListTableCount`](props.pageName)
+		);
 
 		return {
 			dataList,
+			dataCount,
+			pageInfo,
 			getPageData
 		};
 	}

@@ -42,11 +42,12 @@
 		<div class="footer">
 			<slot name="footer">
 				<el-pagination
-					:page-sizes="[100, 200, 300, 400]"
+					:page-size="page.pageSize"
+					:current-page="page.currentPage"
+					:page-sizes="[10, 20, 30, 40]"
 					:small="small"
-					:disabled="disabled"
 					layout="total, sizes, prev, pager, next, jumper"
-					:total="400"
+					:total="listCount"
 					@size-change="handleSizeChange"
 					@current-change="handleCurrentChange"
 				/>
@@ -69,6 +70,10 @@ export default defineComponent({
 			type: Array, // 不好判断数组里面都什么元素和类型 所以不用 as PropType
 			required: true
 		},
+		listCount: {
+			type: Number,
+			default: 0
+		},
 		propList: {
 			type: Array,
 			required: true
@@ -80,27 +85,31 @@ export default defineComponent({
 		showSelectColumn: {
 			type: Boolean,
 			default: false
+		},
+		page: {
+			type: Object,
+			default: () => ({ currentPage: 0, pageSize: 10 })
 		}
 	},
-	emits: ['selectionChange'],
+	emits: ['selectionChange', 'update:page'],
 	setup(props, { emit }) {
 		const handleSelectionChange = (value: any) => {
 			emit('selectionChange', value);
 		};
 
 		const small = ref(false);
-		const disabled = ref(false);
 
-		const handleSizeChange = (val: number) => {
-			console.log(`${val} items per page`);
+		const handleSizeChange = (pageSize: number) => {
+			console.log('props.page', props.page);
+			emit('update:page', { ...props.page, pageSize });
 		};
-		const handleCurrentChange = (val: number) => {
-			console.log(`current page: ${val}`);
+		const handleCurrentChange = (currentPage: number) => {
+			console.log('props.page', props.page);
+			emit('update:page', { ...props.page, currentPage });
 		};
 
 		return {
 			small,
-			disabled,
 			handleSizeChange,
 			handleCurrentChange,
 			handleSelectionChange

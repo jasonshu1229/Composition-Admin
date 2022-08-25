@@ -40,6 +40,11 @@ const systemModule: Module<ISystemState, IRootState> = {
 				// 		return state.roleList;
 				// }
 			};
+		},
+		pageListTableCount(state) {
+			return (pageName: string) => {
+				return (state as any)[`${pageName}Count`];
+			};
 		}
 	},
 	actions: {
