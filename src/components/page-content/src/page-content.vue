@@ -114,7 +114,7 @@ export default defineComponent({
 		const isQuery = usePermission(props.pageName, 'query');
 
 		// 1. 双向绑定一个 pageInfo，需要将它绑定到 table 内部
-		const pageInfo = ref({ currentPage: 0, pageSize: 10 });
+		const pageInfo = ref({ currentPage: 1, pageSize: 10 });
 		// 当pageInfo 改变之后，应该 watch 下，再次请求数据
 		watch(pageInfo, () => getPageData());
 
@@ -125,7 +125,7 @@ export default defineComponent({
 			store.dispatch('system/getPageListAction', {
 				pageName: props.pageName,
 				queryInfo: {
-					offset: pageInfo.value.currentPage * pageInfo.value.pageSize,
+					offset: (pageInfo.value.currentPage - 1) * pageInfo.value.pageSize,
 					size: pageInfo.value.pageSize,
 					...queryInfo
 				}
