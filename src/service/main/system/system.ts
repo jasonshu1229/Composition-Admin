@@ -13,3 +13,13 @@ export function getPageListData(url: string, queryInfo: any) {
 		data: queryInfo
 	});
 }
+
+/**
+ * @description 根据 url 删除对应的数据
+ * @param url /users/id
+ */
+export function deletePageData(url: string) {
+	return shRequest.delete<IDataType>({
+		url: url
+	});
+}
