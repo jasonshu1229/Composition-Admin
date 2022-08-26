@@ -5,8 +5,9 @@
 			title="新建用户"
 			width="30%"
 			center
+			destroy-on-close
 		>
-			<sh-form v-bind="modalConfig" :modelValue="modelValue"></sh-form>
+			<sh-form v-bind="modalConfig" v-model="formData"></sh-form>
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="centerDialogVisible = false">取消</el-button>
@@ -20,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 
 import ShForm from '@/bast-ui/form';
 
@@ -30,18 +31,31 @@ export default defineComponent({
 		modalConfig: {
 			type: Object,
 			required: true
+		},
+		defaultInfo: {
+			type: Object,
+			default: () => ({})
 		}
 	},
 	components: {
 		ShForm
 	},
-	setup() {
+	setup(props) {
 		const centerDialogVisible = ref(false);
-		const modelValue = ref({});
+		const formData = ref<any>({});
+
+		watch(
+			() => props.defaultInfo,
+			(newValue) => {
+				for (const item of props.modalConfig.formItems) {
+					formData.value[`${item.field}`] = newValue[`${item.field}`];
+				}
+			}
+		);
 
 		return {
 			centerDialogVisible,
-			modelValue
+			formData
 		};
 	}
 });

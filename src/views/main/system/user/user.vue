@@ -12,7 +12,11 @@
 			@newBtnClick="handleNewData"
 			@editBtnClick="handleEditData"
 		/>
-		<page-modal ref="pageModalRef" :modalConfig="modalConfig" />
+		<page-modal
+			ref="pageModalRef"
+			:modalConfig="modalConfig"
+			:defaultInfo="defaultInfo"
+		/>
 	</div>
 </template>
 
@@ -30,6 +34,7 @@ import { contentTableConfig } from './config/content.config';
 import { modalConfig } from './config/modal.config';
 
 import { usePageSearch } from '@/hooks/usePageSearch';
+import { usePageModal } from '@/hooks/usePageModal';
 
 export default defineComponent({
 	name: 'user',
@@ -38,19 +43,8 @@ export default defineComponent({
 		const [pageContentRef, handleResetClick, handleQueryClick] =
 			usePageSearch();
 
-		const pageModalRef = ref<InstanceType<typeof PageModal>>();
-
-		const handleNewData = () => {
-			if (pageModalRef.value) {
-				pageModalRef.value.centerDialogVisible = true;
-			}
-		};
-
-		const handleEditData = (item: any) => {
-			if (pageModalRef.value) {
-				pageModalRef.value.centerDialogVisible = true;
-			}
-		};
+		const [pageModalRef, defaultInfo, handleNewData, handleEditData] =
+			usePageModal();
 
 		return {
 			searchFormConfig,
@@ -58,6 +52,7 @@ export default defineComponent({
 			modalConfig,
 			pageContentRef,
 			pageModalRef,
+			defaultInfo,
 			handleResetClick,
 			handleQueryClick,
 			handleNewData,

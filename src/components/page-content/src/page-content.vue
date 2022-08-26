@@ -112,7 +112,6 @@ export default defineComponent({
 		const isUpdate = usePermission(props.pageName, 'update');
 		const isDelete = usePermission(props.pageName, 'delete');
 		const isQuery = usePermission(props.pageName, 'query');
-		console.log(isQuery);
 
 		// 1. 双向绑定一个 pageInfo，需要将它绑定到 table 内部
 		const pageInfo = ref({ currentPage: 0, pageSize: 10 });
