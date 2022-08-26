@@ -9,7 +9,6 @@ export function usePermission(pageName: string, handleName: string) {
 	const store = useStore();
 	const permissions = store.state.login.permissions;
 	const verifyPermission = `system:${pageName}:${handleName}`;
-	console.log('verifyPermission', verifyPermission);
 
 	return !!permissions.find((item) => item === verifyPermission);
 }

@@ -9,34 +9,59 @@
 			ref="pageContentRef"
 			:contentTableConfig="contentTableConfig"
 			pageName="users"
+			@newBtnClick="handleNewData"
+			@editBtnClick="handleEditData"
 		/>
+		<page-modal ref="pageModalRef" :modalConfig="modalConfig" />
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 import PageSearch from '@/components/page-search';
 import PageContent from '@/components/page-content';
+import PageModal from '@/components/page-modal';
+
+import ShForm from '@/bast-ui/form';
 
 import { searchFormConfig } from './config/search.config';
 import { contentTableConfig } from './config/content.config';
+import { modalConfig } from './config/modal.config';
 
 import { usePageSearch } from '@/hooks/usePageSearch';
 
 export default defineComponent({
 	name: 'user',
-	components: { PageSearch, PageContent },
+	components: { PageModal, PageSearch, PageContent, ShForm },
 	setup() {
 		const [pageContentRef, handleResetClick, handleQueryClick] =
 			usePageSearch();
 
+		const pageModalRef = ref<InstanceType<typeof PageModal>>();
+
+		const handleNewData = () => {
+			if (pageModalRef.value) {
+				pageModalRef.value.centerDialogVisible = true;
+			}
+		};
+
+		const handleEditData = (item: any) => {
+			if (pageModalRef.value) {
+				pageModalRef.value.centerDialogVisible = true;
+			}
+		};
+
 		return {
 			searchFormConfig,
 			contentTableConfig,
+			modalConfig,
 			pageContentRef,
+			pageModalRef,
 			handleResetClick,
-			handleQueryClick
+			handleQueryClick,
+			handleNewData,
+			handleEditData
 		};
 	}
 });

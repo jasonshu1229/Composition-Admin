@@ -8,7 +8,7 @@
 		>
 			<!--	1.header中的插槽 -->
 			<template #headerHandler>
-				<el-button type="primary" v-if="isCreate">
+				<el-button type="primary" v-if="isCreate" @click="handleNewClick">
 					<el-icon>
 						<CirclePlus />
 					</el-icon>
@@ -40,7 +40,13 @@
 			</template>
 			<template #handler="scope">
 				<div class="handle-btns">
-					<el-button v-if="isUpdate" size="small" type="primary" link>
+					<el-button
+						v-if="isUpdate"
+						size="small"
+						type="primary"
+						link
+						@click="handleEditClick(scope.row)"
+					>
 						<el-icon>
 							<Edit />
 						</el-icon>
@@ -97,7 +103,8 @@ export default defineComponent({
 			required: true
 		}
 	},
-	setup(props) {
+	emits: ['newBtnClick', 'editBtnClick'],
+	setup(props, { emit }) {
 		const store = useStore();
 
 		// 0. 获得当前用户的操作权限
@@ -157,6 +164,14 @@ export default defineComponent({
 			});
 		};
 
+		const handleNewClick = () => {
+			emit('newBtnClick');
+		};
+
+		const handleEditClick = (item: any) => {
+			emit('editBtnClick', item);
+		};
+
 		return {
 			dataList,
 			dataCount,
@@ -166,7 +181,9 @@ export default defineComponent({
 			isCreate,
 			isUpdate,
 			isDelete,
-			handleDeleteClick
+			handleDeleteClick,
+			handleNewClick,
+			handleEditClick
 		};
 	}
 });
