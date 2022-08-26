@@ -8,7 +8,7 @@
 		>
 			<!--	1.header中的插槽 -->
 			<template #headerHandler>
-				<el-button type="primary">
+				<el-button type="primary" v-if="isCreate">
 					<el-icon>
 						<CirclePlus />
 					</el-icon>
@@ -40,13 +40,13 @@
 			</template>
 			<template #handler>
 				<div class="handle-btns">
-					<el-button size="small" type="primary" link>
+					<el-button v-if="isUpdate" size="small" type="primary" link>
 						<el-icon>
 							<Edit />
 						</el-icon>
 						<span> 编辑 </span>
 					</el-button>
-					<el-button size="small" type="primary" link>
+					<el-button v-if="isDelete" size="small" type="primary" link>
 						<el-icon>
 							<Delete />
 						</el-icon>
@@ -72,6 +72,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref, watch } from 'vue';
 import { useStore } from '@/store';
+import { usePermission } from '@/hooks/usePermission';
 
 import ShTable from '@/bast-ui/table';
 
@@ -93,6 +94,13 @@ export default defineComponent({
 	setup(props) {
 		const store = useStore();
 
+		// 0. 获得当前用户的操作权限
+		const isCreate = usePermission(props.pageName, 'create');
+		const isUpdate = usePermission(props.pageName, 'update');
+		const isDelete = usePermission(props.pageName, 'delete');
+		const isQuery = usePermission(props.pageName, 'query');
+		console.log(isQuery);
+
 		// 1. 双向绑定一个 pageInfo，需要将它绑定到 table 内部
 		const pageInfo = ref({ currentPage: 0, pageSize: 10 });
 		// 当pageInfo 改变之后，应该 watch 下，再次请求数据
@@ -100,6 +108,8 @@ export default defineComponent({
 
 		// 2. 发送网络请求
 		const getPageData = (queryInfo: any = {}) => {
+			// 当前用户没有查看权限的话，直接不请求数据
+			if (!isQuery) return;
 			store.dispatch('system/getPageListAction', {
 				pageName: props.pageName,
 				queryInfo: {
@@ -137,7 +147,10 @@ export default defineComponent({
 			dataCount,
 			pageInfo,
 			otherPropSlots,
-			getPageData
+			getPageData,
+			isCreate,
+			isUpdate,
+			isDelete
 		};
 	}
 });

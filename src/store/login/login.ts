@@ -12,7 +12,7 @@ import { ILoginState } from './types';
 import { IRootState } from '../types';
 
 import localCache from '@/utils/cache';
-import { mapMenusToRoutes } from '@/utils/map-menu';
+import { mapMenusToPermission, mapMenusToRoutes } from '@/utils/map-menu';
 
 const loginModule: Module<ILoginState, IRootState> = {
 	namespaced: true,
@@ -21,7 +21,8 @@ const loginModule: Module<ILoginState, IRootState> = {
 			isDark: false,
 			token: '',
 			userInfo: {},
-			userMenus: []
+			userMenus: [],
+			permissions: []
 		};
 	},
 	getters: {},
@@ -46,6 +47,11 @@ const loginModule: Module<ILoginState, IRootState> = {
 				// 把遍历到的路由添加到 main 路由的子路由下面
 				router.addRoute('main', route);
 			});
+
+			//	获取用户按钮的权限
+			const permissions = mapMenusToPermission(userMenus);
+			state.permissions = permissions;
+			console.log(permissions);
 		}
 	},
 	actions: {

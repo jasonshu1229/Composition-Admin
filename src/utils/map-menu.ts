@@ -99,4 +99,26 @@ export function pathMapToMenu(
 	}
 }
 
+/**
+ * @description 递归角色菜单直至找到type为3的角色权限（增删改查）为了获取用户的权限
+ * @param userMenu 角色菜单
+ */
+export function mapMenusToPermission(userMenu: any[]) {
+	const permissions: string[] = [];
+
+	const _recurseGetPermission = (menus: any[]) => {
+		for (const menu of menus) {
+			if (menu.type === 1 || menu.type === 2) {
+				_recurseGetPermission(menu.children ?? []);
+			} else if (menu.type === 3) {
+				permissions.push(menu.permission);
+			}
+		}
+	};
+
+	_recurseGetPermission(userMenu);
+
+	return permissions;
+}
+
 export { firstMenu };
