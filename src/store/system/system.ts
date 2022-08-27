@@ -2,7 +2,12 @@ import { Module } from 'vuex';
 import { ISystemState } from '@/store/system/types';
 import { IRootState } from '@/store/types';
 
-import { deletePageData, getPageListData } from '@/service/main/system/system';
+import {
+	deletePageData,
+	getPageListData,
+	createPageData,
+	editPageData
+} from '@/service/main/system/system';
 
 const systemModule: Module<ISystemState, IRootState> = {
 	namespaced: true,
@@ -97,6 +102,41 @@ const systemModule: Module<ISystemState, IRootState> = {
 
 			// 3. 重新请求最新的数据
 			// TODO: 可以把 查询的数据和分页的数据放在vuex中
+			dispatch('getPageListAction', {
+				pageName,
+				queryInfo: {
+					offset: 0,
+					size: 10
+				}
+			});
+		},
+
+		async createPageDataAction({ dispatch }, payload: any) {
+			// 1. 创建数据的请求
+			const { pageName, newData } = payload;
+			const pageUrl = `/${pageName}`;
+			console.log(pageUrl);
+			console.log(newData);
+			await createPageData(pageUrl, newData);
+
+			// 2. 请求最新的数据
+			dispatch('getPageListAction', {
+				pageName,
+				queryInfo: {
+					offset: 0,
+					size: 10
+				}
+			});
+		},
+
+		async editPageDataAction({ dispatch }, payload: any) {
+			// 1. 编辑数据的请求
+			const { pageName, editData, id } = payload;
+			console.log('editData', editData);
+			const pageUrl = `/${pageName}/${id}`;
+			await editPageData(pageUrl, editData);
+
+			// 2. 请求最新的数据
 			dispatch('getPageListAction', {
 				pageName,
 				queryInfo: {

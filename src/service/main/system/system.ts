@@ -23,3 +23,27 @@ export function deletePageData(url: string) {
 		url: url
 	});
 }
+
+/**
+ * @description 根据 url 创建对应数据
+ * @param url /user
+ * @param newData 新建时编写的数据
+ */
+export function createPageData(url: string, newData: any) {
+	return shRequest.post<IDataType>({
+		url: url,
+		data: newData
+	});
+}
+
+/**
+ * @description 根据 url 编辑对应数据
+ * @param url /user
+ * @param editData 编辑时填入的数据
+ */
+export function editPageData(url: string, editData: any) {
+	return shRequest.patch<IDataType>({
+		url: url,
+		data: editData
+	});
+}

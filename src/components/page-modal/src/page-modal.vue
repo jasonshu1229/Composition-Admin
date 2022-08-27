@@ -11,9 +11,7 @@
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="centerDialogVisible = false">取消</el-button>
-					<el-button type="primary" @click="centerDialogVisible = false"
-						>确认</el-button
-					>
+					<el-button type="primary" @click="handleConfirmClick">确认</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -24,6 +22,7 @@
 import { defineComponent, ref, watch } from 'vue';
 
 import ShForm from '@/bast-ui/form';
+import { useStore } from '@/store';
 
 export default defineComponent({
 	name: 'page-modal',
@@ -35,6 +34,10 @@ export default defineComponent({
 		defaultInfo: {
 			type: Object,
 			default: () => ({})
+		},
+		pageName: {
+			type: String,
+			required: true
 		}
 	},
 	components: {
@@ -53,9 +56,30 @@ export default defineComponent({
 			}
 		);
 
+		// 点击确定按钮的逻辑
+		const store = useStore();
+		const handleConfirmClick = () => {
+			centerDialogVisible.value = false;
+			if (Object.keys(props.defaultInfo).length) {
+				// 编辑
+				store.dispatch('system/editPageDataAction', {
+					pageName: props.pageName,
+					editData: { ...formData.value },
+					id: props.defaultInfo.id
+				});
+			} else {
+				// 新建
+				store.dispatch('system/createPageDataAction', {
+					pageName: props.pageName,
+					newData: { ...formData.value }
+				});
+			}
+		};
+
 		return {
 			centerDialogVisible,
-			formData
+			formData,
+			handleConfirmClick
 		};
 	}
 });
