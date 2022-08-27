@@ -14,14 +14,14 @@
 		/>
 		<page-modal
 			ref="pageModalRef"
-			:modalConfig="modalConfig"
+			:modalConfig="modalConfigRef"
 			:defaultInfo="defaultInfo"
 		/>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import PageSearch from '@/components/page-search';
 import PageContent from '@/components/page-content';
@@ -35,6 +35,7 @@ import { modalConfig } from './config/modal.config';
 
 import { usePageSearch } from '@/hooks/usePageSearch';
 import { usePageModal } from '@/hooks/usePageModal';
+import { useStore } from '@/store';
 
 export default defineComponent({
 	name: 'user',
@@ -59,6 +60,26 @@ export default defineComponent({
 			passwordItem!.isHidden = true;
 		};
 
+		// 2. 动态添加部门和角色列表
+		// 注意：使用 computed 监听 vuex 中数据发生的改变，当数据发生改变，重新执行 computed 中的 getter 函数
+		const store = useStore();
+		const modalConfigRef = computed(() => {
+			const departmentItem = modalConfig.formItems.find(
+				(item) => item.field === 'departmentId'
+			);
+			departmentItem!.options = store.state.entireDepartment.map((item) => {
+				return { title: item.name, value: item.name };
+			});
+			const roleItem = modalConfig.formItems.find(
+				(item) => item.field === 'roleId'
+			);
+			roleItem!.options = store.state.entireRole.map((item) => {
+				return { title: item.name, value: item.name };
+			});
+			return modalConfig;
+		});
+
+		// 3. 调用hook获取公共变量和函数
 		const [pageModalRef, defaultInfo, handleNewData, handleEditData] =
 			usePageModal(newCallback, editCallback);
 
@@ -69,6 +90,7 @@ export default defineComponent({
 			pageContentRef,
 			pageModalRef,
 			defaultInfo,
+			modalConfigRef,
 			handleResetClick,
 			handleQueryClick,
 			handleNewData,
