@@ -43,8 +43,24 @@ export default defineComponent({
 		const [pageContentRef, handleResetClick, handleQueryClick] =
 			usePageSearch();
 
+		// 1. 处理 pageModal相关的 hook 逻辑
+		// 是否显示"密码选项"的input
+		const newCallback = () => {
+			const passwordItem = modalConfig.formItems.find(
+				(item) => item.field === 'password'
+			);
+			passwordItem!.isHidden = false;
+		};
+
+		const editCallback = () => {
+			const passwordItem = modalConfig.formItems.find(
+				(item) => item.field === 'password'
+			);
+			passwordItem!.isHidden = true;
+		};
+
 		const [pageModalRef, defaultInfo, handleNewData, handleEditData] =
-			usePageModal();
+			usePageModal(newCallback, editCallback);
 
 		return {
 			searchFormConfig,

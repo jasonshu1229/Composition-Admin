@@ -10,6 +10,7 @@ export interface IFormItem {
 	// 针对特殊的属性 比如 datePicker
 	otherOptions?: any;
 	field: string;
+	isHidden?: boolean;
 }
 
 export interface IForm {

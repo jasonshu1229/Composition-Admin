@@ -1,10 +1,13 @@
 import { ref } from 'vue';
 import PageModal from 'components/page-modal';
 
+// 定义回调函数类型
+type CallbackFn = () => void;
+
 /**
  * @description 显示提示框的一些操作
  */
-export function usePageModal() {
+export function usePageModal(newCb?: CallbackFn, editCb?: CallbackFn) {
 	const pageModalRef = ref<InstanceType<typeof PageModal>>();
 	const defaultInfo = ref({});
 
@@ -13,6 +16,7 @@ export function usePageModal() {
 		if (pageModalRef.value) {
 			pageModalRef.value.centerDialogVisible = true;
 		}
+		newCb && newCb();
 	};
 
 	const handleEditData = (item: any) => {
@@ -21,6 +25,7 @@ export function usePageModal() {
 		if (pageModalRef.value) {
 			pageModalRef.value.centerDialogVisible = true;
 		}
+		editCb && editCb();
 	};
 
 	return [pageModalRef, defaultInfo, handleNewData, handleEditData];
