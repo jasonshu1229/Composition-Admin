@@ -25,7 +25,7 @@ import { defineComponent, ref, computed } from 'vue';
 import { pathMapBreadcrumbs } from '@/utils/map-menu';
 
 import userInfo from './user-info.vue';
-import ShBreadcrumb from '@/bast-ui/breadcrumb';
+import ShBreadcrumb from '@/base-ui/breadcrumb';
 import SwitchDark from '@/components/switch-dark';
 
 import { useStore } from '@/store';

@@ -86,7 +86,7 @@ import { computed, defineComponent, ref, watch } from 'vue';
 import { useStore } from '@/store';
 import { usePermission } from '@/hooks/usePermission';
 
-import ShTable from '@/bast-ui/table';
+import ShTable from '@/base-ui/table';
 
 export default defineComponent({
 	name: 'page-content',

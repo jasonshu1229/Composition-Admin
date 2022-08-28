@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import ShForm from '@/bast-ui/form';
+import ShForm from '@/base-ui/form';
 
 export default defineComponent({
 	name: 'page-search',

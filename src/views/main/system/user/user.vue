@@ -28,7 +28,7 @@ import PageSearch from '@/components/page-search';
 import PageContent from '@/components/page-content';
 import PageModal from '@/components/page-modal';
 
-import ShForm from '@/bast-ui/form';
+import ShForm from '@/base-ui/form';
 
 import { searchFormConfig } from './config/search.config';
 import { contentTableConfig } from './config/content.config';

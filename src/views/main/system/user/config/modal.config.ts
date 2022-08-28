@@ -1,4 +1,4 @@
-import { IForm } from '@/bast-ui/form';
+import { IForm } from '@/base-ui/form';
 
 export const modalConfig: IForm = {
 	labelWidth: '80px',

@@ -1,5 +1,5 @@
 import { RouteRecordRaw } from 'vue-router';
-import { IBreadcrumb } from '@/bast-ui/breadcrumb';
+import { IBreadcrumb } from '@/base-ui/breadcrumb';
 
 let firstMenu: any = null; // 项目首次加载的默认路由
 

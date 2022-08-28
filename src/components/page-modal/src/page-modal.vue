@@ -8,6 +8,7 @@
 			destroy-on-close
 		>
 			<sh-form v-bind="modalConfig" v-model="formData"></sh-form>
+			<slot></slot>
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="centerDialogVisible = false">取消</el-button>
@@ -21,7 +22,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
 
-import ShForm from '@/bast-ui/form';
+import ShForm from '@/base-ui/form';
 import { useStore } from '@/store';
 
 export default defineComponent({
@@ -32,6 +33,10 @@ export default defineComponent({
 			required: true
 		},
 		defaultInfo: {
+			type: Object,
+			default: () => ({})
+		},
+		otherInfo: {
 			type: Object,
 			default: () => ({})
 		},
@@ -46,6 +51,8 @@ export default defineComponent({
 	setup(props) {
 		const centerDialogVisible = ref(false);
 		const formData = ref<any>({});
+
+		console.log('otherInfo', props.otherInfo);
 
 		watch(
 			() => props.defaultInfo,
@@ -64,14 +71,14 @@ export default defineComponent({
 				// 编辑
 				store.dispatch('system/editPageDataAction', {
 					pageName: props.pageName,
-					editData: { ...formData.value },
+					editData: { ...formData.value, ...props.otherInfo },
 					id: props.defaultInfo.id
 				});
 			} else {
 				// 新建
 				store.dispatch('system/createPageDataAction', {
 					pageName: props.pageName,
-					newData: { ...formData.value }
+					newData: { ...formData.value, ...props.otherInfo }
 				});
 			}
 		};
