@@ -13,6 +13,7 @@ import { IRootState } from '../types';
 
 import localCache from '@/utils/cache';
 import { mapMenusToPermission, mapMenusToRoutes } from '@/utils/map-menu';
+import store from '@/store';
 
 const loginModule: Module<ILoginState, IRootState> = {
 	namespaced: true,
@@ -28,7 +29,6 @@ const loginModule: Module<ILoginState, IRootState> = {
 	getters: {},
 	mutations: {
 		changeTheme(state, newValue: boolean) {
-			console.log('newValue', newValue);
 			state.isDark = newValue;
 		},
 		changeToken(state, token: string) {
@@ -58,12 +58,15 @@ const loginModule: Module<ILoginState, IRootState> = {
 			commit('changeTheme', payload);
 			localCache.setCache('isDark', payload);
 		},
-		async accountLoginAction({ commit }, payload: IAccount) {
+		async accountLoginAction({ commit, dispatch }, payload: IAccount) {
 			// 1. 实现登录逻辑
 			const loginResult = await accountLoginRequest(payload);
 			const { id, token } = loginResult.data;
 			commit('changeToken', token);
 			localCache.setCache('token', token);
+
+			// 获取到token之后，立马请求（完整的role/department）
+			dispatch('getInitialDataAction', null, { root: true });
 
 			// 2. 请求用户信息
 			const userInfoResult = await requestUserInfoById(id);
@@ -80,7 +83,8 @@ const loginModule: Module<ILoginState, IRootState> = {
 			// 4. 跳到首页
 			await router.push('/main');
 		},
-		loadLocalLogin({ commit }) {
+		loadLocalLogin({ commit, dispatch }) {
+			// 本地加载函数
 			const isDark = localCache.getCache('isDark');
 			if (isDark) {
 				commit('changeTheme', isDark);
@@ -88,6 +92,7 @@ const loginModule: Module<ILoginState, IRootState> = {
 			const token = localCache.getCache('token');
 			if (token) {
 				commit('changeToken', token);
+				dispatch('getInitialDataAction', null, { root: true });
 			}
 			const userInfo = localCache.getCache('userInfo');
 			if (userInfo) {

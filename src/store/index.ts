@@ -55,7 +55,8 @@ const store = createStore<IRootState>({
  */
 export function setupStore() {
 	store.dispatch('login/loadLocalLogin');
-	store.dispatch('getInitialDataAction');
+	// 不能放在这里，因为 异步操作有可能 token没回来，造成请求失败
+	// store.dispatch('getInitialDataAction');
 }
 
 export function useStore(): Store<IStoreType> {
