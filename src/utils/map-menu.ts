@@ -121,4 +121,26 @@ export function mapMenusToPermission(userMenu: any[]) {
 	return permissions;
 }
 
+/**
+ * @description 将角色菜单映射成其所属权限的"叶子"节点
+ * @param menuList 角色菜单
+ */
+export function menuMapLeafKeys(menuList: any[]) {
+	const leafKeys: number[] = [];
+
+	const _recurseGetLeaf = (menuList: any[]) => {
+		for (const menu of menuList) {
+			if (menu.children) {
+				_recurseGetLeaf(menu.children);
+			} else {
+				leafKeys.push(menu.id);
+			}
+		}
+	};
+
+	_recurseGetLeaf(menuList);
+
+	return leafKeys;
+}
+
 export { firstMenu };

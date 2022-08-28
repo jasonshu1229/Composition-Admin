@@ -5,7 +5,7 @@
 			:contentTableConfig="contentTableConfig"
 			pageName="role"
 			@newBtnClick="handleNewData"
-			@editClick="handleEditData"
+			@editBtnClick="handleEditData"
 		/>
 		<page-modal
 			ref="pageModalRef"
@@ -16,6 +16,7 @@
 		>
 			<div class="menu-tree">
 				<el-tree
+					ref="elTreeRef"
 					:data="menus"
 					show-checkbox
 					node-key="id"
@@ -28,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import { defineComponent, ref, computed, nextTick } from 'vue';
 import { useStore } from '@/store';
 
 import PageSearch from '@/components/page-search';
@@ -40,13 +41,28 @@ import { contentTableConfig } from './config/content.config';
 import { modalConfig } from './config/modal.config';
 
 import { usePageModal } from '@/hooks/usePageModal';
+import { menuMapLeafKeys } from '@/utils/map-menu';
+import { ElTree } from 'element-plus';
 
 export default defineComponent({
 	name: 'role',
 	components: { PageSearch, PageContent, PageModal },
 	setup() {
+		// 处理 pageModal 的 hook
+		// 为了处理编辑菜单时的回显权限数据（回显树状数据，一般由"叶子"节点开始）
+		// 需要需要先找到当时编辑选中的item的 叶子节点
+		const elTreeRef = ref<InstanceType<typeof ElTree>>();
+		const editCallback = (item: any) => {
+			console.log('editCallback', item);
+			const leafKeys = menuMapLeafKeys(item.menuList);
+			nextTick(() => {
+				console.log('elTreeRef', elTreeRef.value);
+				elTreeRef.value?.setCheckedKeys(leafKeys, false);
+			});
+		};
+
 		const [pageModalRef, defaultInfo, handleNewData, handleEditData] =
-			usePageModal();
+			usePageModal(undefined, editCallback);
 
 		const store = useStore();
 		// 使用计算属性 保证数据是响应式的，防止因为后获取到出现问题
@@ -65,13 +81,14 @@ export default defineComponent({
 			searchFormConfig,
 			contentTableConfig,
 			modalConfig,
+			menus,
 			pageModalRef,
 			defaultInfo,
 			handleNewData,
 			handleEditData,
-			menus,
 			handleCheckChange,
-			otherInfo
+			otherInfo,
+			elTreeRef
 		};
 	}
 });
