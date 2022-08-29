@@ -13,7 +13,6 @@ import { IRootState } from '../types';
 
 import localCache from '@/utils/cache';
 import { mapMenusToPermission, mapMenusToRoutes } from '@/utils/map-menu';
-import store from '@/store';
 
 const loginModule: Module<ILoginState, IRootState> = {
 	namespaced: true,

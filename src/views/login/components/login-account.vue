@@ -2,13 +2,13 @@
 	<div class="login-account">
 		<el-form label-width="60px" :rules="rules" :model="account" ref="formRef">
 			<el-form-item label="账号" prop="name">
-				<el-input v-model="account.name" placeholder="coderwhy" />
+				<el-input v-model="account.name" placeholder="用户名：coderwhy" />
 			</el-form-item>
 			<el-form-item label="密码" prop="password">
 				<el-input
 					v-model="account.password"
 					show-password
-					placeholder="123456"
+					placeholder="密码：123456"
 				/>
 			</el-form-item>
 		</el-form>
